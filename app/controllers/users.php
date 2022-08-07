@@ -5,11 +5,11 @@
     $response = view('layouts/modal-form', [
       'fdata' => $fdata,
       'form'  => (object)[
-        'action' => 'portaria/save'
+        'action' => 'users/save'
       ],
       'modal' => (object)[
-        'icon'  => 'fa-solid fa-address-card',
-        'title' => 'Cadastrar'
+        'icon'  => 'fa-solid fa-user-plus',
+        'title' => 'Cadastrar User'
       ],
       'body'  => $View['path']
     ]);

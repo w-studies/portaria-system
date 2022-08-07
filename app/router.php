@@ -17,16 +17,24 @@ if (isset($_SERVER['PATH_INFO'])) {
 }
 
 $Controller = [
-  'name' => $controller,
-  'path' => 'app/controllers/' . $controller . '.php',
+  'name' => $controller
 ];
 
 $View = [
   'name' => $view,
-  'path' => 'app/views/' . $controller . '/' . $view . '.php',
+  'path' => $controller . '/' . $view,
 ];
 
+// se a view for add
+if ($view === 'add') {
+  require 'app/helpers/forms_helper.php';
+}
 
-if (is_file($Controller['path'])) {
-  require $Controller['path'];
+$controllerFile = 'app/controllers/' . $controller . '.php';
+// se existir um controller
+if (is_file($controllerFile)) {
+  //
+  require 'app/helpers/database_helper.php';
+  //
+  require $controllerFile;
 }

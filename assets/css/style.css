@@ -225,7 +225,10 @@ main > .stage {
 form label {
   color: #7a7e81;
 }
-
+form div[class^='col'] {
+  margin-top: 0.25rem !important;
+  margin-bottom: 0.25rem !important;
+}
 form div[class^='col']:focus-within label {
   color: #212;
 }

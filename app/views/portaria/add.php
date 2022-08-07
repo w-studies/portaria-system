@@ -1,68 +1,108 @@
-<form action="save" method="post">
-  <div class="modal-header">
-    <h3 class="fw-light m-0"><i class="fa-solid fa-address-card"></i> Cadastrar</h3>
-    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+<div class="row">
+  <?= col_input([
+    'cols'  => 'col-12',
+    'label' => 'Nome',
+    'input' => [
+      'name'  => 'name',
+      'value' => $fdata->name,
+      'required' => true
+    ]
+  ])
+    . col_input([
+      'cols'  => 'col-md-6 col-lg-4',
+      'label' => 'Matrícula',
+      'input' => [
+        'name'  => 'registration',
+        'value' => $fdata->registration,
+        'required' => true
+      ]
+    ])
+    . col_input([
+      'cols'  => 'col-md-6 col-lg-4',
+      'label' => 'Tipo de Cliente',
+      'input' => [
+        'name'  => 'client_type',
+        'value' => $fdata->client_type
+      ]
+    ])
+    . col_input([
+      'cols'  => 'col-md-6 col-lg-4',
+      'label' => 'RG',
+      'input' => [
+        'name'  => 'rg',
+        'value' => $fdata->rg
+      ]
+    ])
+    . col_input([
+      'cols'  => 'col-md-6 col-lg-4',
+      'label' => 'Placa',
+      'input' => [
+        'name'  => 'vehicle_plate',
+        'value' => $fdata->vehicle_plate
+      ]
+    ])
+    . col_input([
+      'cols'  => 'col-md-6 col-lg-8',
+      'label' => 'Veículo',
+      'input' => [
+        'name'  => 'vehicle',
+        'value' => $fdata->vehicle
+      ]
+    ])
+  ?>
+  <div class="col-md-6 col-lg-4">
+    <label>Estado</label>
+    <select name="" id="" class="form-select">
+      <option value="">AC</option>
+      <option value="">AL</option>
+      <option value="">AP</option>
+      <option value="">AM</option>
+      <option value="">BA</option>
+      <option value="">CE</option>
+      <option value="">DF</option>
+      <option value="">ES</option>
+      <option value="">GO</option>
+      <option value="">MA</option>
+      <option value="">MT</option>
+      <option value="">MS</option>
+      <option value="">MG</option>
+      <option value="">PA</option>
+      <option value="">PB</option>
+      <option value="">PR</option>
+      <option value="">PE</option>
+      <option value="">PI</option>
+      <option value="">RJ</option>
+      <option value="">RN</option>
+      <option value="">RS</option>
+      <option value="">RO</option>
+      <option value="">RR</option>
+      <option value="">SC</option>
+      <option value="">SP</option>
+      <option value="">SE</option>
+      <option value="">TO</option>
+    </select>
   </div>
-  <div class="modal-body">
-    <div class="row">
-      <div class="col-12 my-1">
-        <label>Nome</label>
-        <input type="text" name="" class="form-control">
-      </div>
-      <div class="col-md-6 col-lg-4 my-1">
-        <label>Matrícula</label>
-        <input type="text" name="" class="form-control">
-      </div>
-      <div class="col-md-6 col-lg-4 my-1">
-        <label>Tipo de Cliente</label>
-        <input type="text" name="" class="form-control">
-      </div>
-      <div class="col-md-6 col-lg-4 my-1">
-        <label>RG</label>
-        <input type="text" name="" class="form-control">
-      </div>
-      <div class="col-md-6 col-lg-4 my-1">
-        <label>Placa</label>
-        <input type="text" name="" class="form-control">
-      </div>
-      <div class="col-md-3 my-1">
-        <label>Estado</label>
-        <select name="" id="" class="form-select">
-          <option value="">AC</option>
-          <option value="">AM</option>
-          <option value="">BA</option>
-          <option value="">DF</option>
-          <option value="">GO</option>
-          <option value="">MG</option>
-          <option value="">MT</option>
-          <option value="">MS</option>
-          <option value="">PA</option>
-          <option value="">PR</option>
-          <option value="">RO</option>
-          <option value="">RR</option>
-          <option value="">RS</option>
-          <option value="">SP</option>
-          <option value="">TO</option>
-        </select>
-      </div>
-      <div class="col-md-9 col-lg-5 my-1">
-        <label>Cidade</label>
-        <input type="text" name="" class="form-control">
-      </div>
-      <div class="col-3 col-sm-2">
-        <label>Acesso Liberado</label>
-        <div class="form-check form-switch">
-          <input class="form-check-input" type="checkbox" role="switch" checked>
-        </div>
-      </div>
-      <div class="col-9 col-sm-10 my-1">
-        <label>Empresa</label>
-        <input type="text" name="" class="form-control">
-      </div>
+
+  <?= col_input([
+    'cols'  => 'col-md-6 col-lg-8',
+    'label' => 'Cidade',
+    'input' => [
+      'name'  => 'city',
+      'value' => $fdata->city
+    ]
+  ]) ?>
+  <div class="col-3 col-sm-2">
+    <label for='status'>Acesso Liberado</label>
+    <div class="form-check form-switch">
+      <input class="form-check-input" name="status" type="checkbox" role="switch" checked>
     </div>
   </div>
-  <div class="modal-footer">
-    <input type="reset" class="btn btn-default" value="Reset">
-    <button class="btn btn-primary ms-4"><i class="fa-solid fa-floppy-disk"></i> Salvar</button>
-  </div>
-</form>
+  <?= col_input([
+    'cols'  => 'col-9 col-sm-10 col-md-12 col-lg-10',
+    'label' => 'Empresa',
+    'input' => [
+      'name'  => 'company',
+      'value' => $fdata->company
+    ]
+  ]) ?>
+</div>

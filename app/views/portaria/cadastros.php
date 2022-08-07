@@ -4,6 +4,6 @@
   </div>
   <div class="col col-md-auto ms-md-auto">
     <a href="portaria/add" role="modal" data-modal-size="lg" class="btn btn-primary">
-      <i class="fa-solid fa-user-plus"></i> Cadastrar</a>
+      <i class="fa-solid fa-plus"></i> Cadastrar</a>
   </div>
 </div>

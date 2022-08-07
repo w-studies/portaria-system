@@ -6,7 +6,7 @@ const modalsOpener = document.querySelectorAll('[role="modal"]')
 
 const createModal = (content, size = 'sm') => {
   // retorna o elemento modal
-  const modal = document.createElement('div')
+  modal = document.createElement('div')
   modal.className = 'modal'
 
   const modalDialog = document.createElement('div')
@@ -22,12 +22,20 @@ const createModal = (content, size = 'sm') => {
   $body.append(modal)
 
   const mainModal = new bootstrap.Modal(modal)
-  mainModal.show()
 
   modal.addEventListener('hidden.bs.modal', (e) => {
     //destroy modal
     modal.remove()
   })
+
+  modal.addEventListener('shown.bs.modal', (e) => {
+    const form = modal.querySelector('form')
+
+    if (form) {
+      listenForm()
+    }
+  })
+  mainModal.show()
 }
 
 const openModal = async (route, options) => {
@@ -93,7 +101,7 @@ const fetchJson = async (url, data, method = 'POST') => {
 
   const retorno = {
     statusCode: 404,
-    body: 'not found'
+    body      : 'not found'
   }
 
   // faz o request
@@ -106,11 +114,55 @@ const fetchJson = async (url, data, method = 'POST') => {
     retorno.statusCode = request.status
     retorno.body = clearDoubleQuotes(body)
   } else {
-    const body = await request.text()
+
+    const body = await request[request.headers.get('content-type').includes('json') ? 'json' : 'text']()
     // define retorno
     retorno.statusCode = request.status == 200 ? 400 : request.status
     retorno.body = clearDoubleQuotes(body)
   }
 
   return retorno
+}
+const listenForm = () => {
+  // ao submeter o form
+  document.querySelector('.modal form').addEventListener('submit', async (e) => {
+    e.preventDefault()
+
+    // define o form
+    const form = e.target
+
+    // define os dados do form
+    const fData = new FormData(form)
+
+    if (form.hasAttribute('data-edit')) {
+      fData.append('id', form.dataset.edit)
+    }
+
+    // submete os dados do form
+    const response = await fetchJson(form.getAttribute('action'), fData)
+
+    // se response estiver ok
+    if (response.statusCode === 200) {
+      console.log('success :>> ', response.body)
+
+      // atualiza a tabela
+      await renderTableData()
+
+      // reseta o form
+      form.reset()
+    } else {
+      console.log('typeof response.body :>>', typeof response.body);
+      console.log('response :>>', response);
+      Swal.fire({
+        title            : 'Oops!',
+        html             : response.body.response,
+        icon             : 'error',
+        showCloseButton  : true,
+        showConfirmButton: false,
+      })
+      console.log('error :>> ', response.body)
+    }
+
+    return false
+  })
 }
