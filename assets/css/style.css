@@ -232,3 +232,14 @@ form div[class^='col'] {
 form div[class^='col']:focus-within label {
   color: #212;
 }
+
+.btn {
+  transition: all 0.2s ease;
+}
+.btn .spinner-border {
+  display: none;
+}
+
+.btn.isLoading .spinner-border {
+  display: inline-block;
+}

@@ -23,18 +23,12 @@ const createModal = (content, size = 'sm') => {
 
   const mainModal = new bootstrap.Modal(modal)
 
-  modal.addEventListener('hidden.bs.modal', (e) => {
+  modal.addEventListener('hidden.bs.modal', e => {
     //destroy modal
     modal.remove()
   })
 
-  modal.addEventListener('shown.bs.modal', (e) => {
-    const form = modal.querySelector('form')
-
-    if (form) {
-      listenForm()
-    }
-  })
+  modal.addEventListener('shown.bs.modal', e => {})
   mainModal.show()
 }
 
@@ -53,12 +47,12 @@ for (const modalOpener of modalsOpener) {
   })
 }
 
-document.querySelector('a[href="show-sidebar"]').addEventListener('click', (e) => {
+document.querySelector('a[href="show-sidebar"]').addEventListener('click', e => {
   e.preventDefault()
   app.classList.toggle('sidebar-show')
 })
 
-document.querySelector('.app-footer a[href="about"]').addEventListener('click', (e) => {
+document.querySelector('.app-footer a[href="about"]').addEventListener('click', e => {
   e.preventDefault()
   const myString = `<div class="modal-header">
   <h5 class="modal-title">Portaria System</h5>
@@ -73,7 +67,7 @@ document.querySelector('.app-footer a[href="about"]').addEventListener('click', 
 })
 
 //
-const clearDoubleQuotes = (string) => {
+const clearDoubleQuotes = string => {
   // se o corpo da mensagem for uma double quoted json string
   if (string.length >= 2 && string.charAt(0) == '"' && string.charAt(string.length - 1) == '"') {
     // remove as aspas duplas
@@ -101,7 +95,7 @@ const fetchJson = async (url, data, method = 'POST') => {
 
   const retorno = {
     statusCode: 404,
-    body      : 'not found'
+    body: 'not found'
   }
 
   // faz o request
@@ -114,8 +108,9 @@ const fetchJson = async (url, data, method = 'POST') => {
     retorno.statusCode = request.status
     retorno.body = clearDoubleQuotes(body)
   } else {
-
-    const body = await request[request.headers.get('content-type').includes('json') ? 'json' : 'text']()
+    const body = await request[
+      request.headers.get('content-type').includes('json') ? 'json' : 'text'
+    ]()
     // define retorno
     retorno.statusCode = request.status == 200 ? 400 : request.status
     retorno.body = clearDoubleQuotes(body)
@@ -123,46 +118,75 @@ const fetchJson = async (url, data, method = 'POST') => {
 
   return retorno
 }
-const listenForm = () => {
-  // ao submeter o form
-  document.querySelector('.modal form').addEventListener('submit', async (e) => {
-    e.preventDefault()
 
-    // define o form
-    const form = e.target
+const modalFormSubmit = async e => {
+  e.preventDefault()
 
-    // define os dados do form
-    const fData = new FormData(form)
+  // define o form
+  const form = e.target
 
-    if (form.hasAttribute('data-edit')) {
-      fData.append('id', form.dataset.edit)
-    }
+  // define os dados do form
+  const fData = new FormData(form)
 
-    // submete os dados do form
-    const response = await fetchJson(form.getAttribute('action'), fData)
+  // se existe informação de edição
+  if (form.hasAttribute('data-edit')) {
+    fData.append('id', form.dataset.edit)
+  }
 
-    // se response estiver ok
-    if (response.statusCode === 200) {
-      console.log('success :>> ', response.body)
-
-      // atualiza a tabela
-      await renderTableData()
-
-      // reseta o form
-      form.reset()
-    } else {
-      console.log('typeof response.body :>>', typeof response.body);
-      console.log('response :>>', response);
-      Swal.fire({
-        title            : 'Oops!',
-        html             : response.body.response,
-        icon             : 'error',
-        showCloseButton  : true,
-        showConfirmButton: false,
-      })
-      console.log('error :>> ', response.body)
-    }
-
-    return false
+  // se existe arquivo a ser enviado
+  form.querySelectorAll('input[type="file"]').forEach(({ name, files: [file] }, index) => {
+    if (file && name) fData.append(name, file, file.name)
   })
+
+  // inicia o loader
+  const button = form.querySelector('.modal-footer button.btn')
+  button.classList.add('disabled', 'isLoading')
+
+  // submete os dados do form
+  const response = await fetchJson(form.getAttribute('action'), fData)
+
+  // desativa o loader
+  button.classList.remove('disabled', 'isLoading')
+
+  // se response estiver ok
+  if (response.statusCode === 200) {
+    console.log('success :>> ', response.body)
+
+    // atualiza a tabela
+    await renderTableData()
+
+    // reseta o form
+    form.reset()
+  } else {
+    console.log('typeof response.body :>>', typeof response.body)
+    console.log('response :>>', response)
+    Swal.fire({
+      title: 'Oops!',
+      html: response.body.response,
+      icon: 'error',
+      showCloseButton: true,
+      showConfirmButton: false
+    })
+    console.log('error :>> ', response.body)
+  }
+
+  return false
 }
+
+// DELEGATE SUBMIT
+$body.addEventListener('submit', async e => {
+  const { target } = e
+  // MODAL FORM
+  if (target.matches('.modal-form')) {
+    modalFormSubmit(e)
+  }
+})
+
+// DELEGATE CHANGE
+$body.addEventListener('change', ({ target }) => {
+  if (target.matches('input[rel="image-loader"]')) {
+    const { destiny } = target.dataset
+    const [image] = target.files
+    document.querySelector('img[data-' + destiny + ']').src = URL.createObjectURL(image)
+  }
+})

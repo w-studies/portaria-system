@@ -1,0 +1,62 @@
+{
+  "Export Const Function": {
+    "scope": "javascript,typescript,javascriptreact,typescriptreact",
+    "prefix": "efn",
+    "body": ["export const $TM_FILENAME_BASE = (param) => {", "", "return($1);", "", "};"],
+    "description": "export const function"
+  },
+  "Export Default Component": {
+    "scope": "javascript,typescript,javascriptreact,typescriptreact",
+    "prefix": "edc",
+    "body": [
+      "const $TM_FILENAME_BASE = (param) => {",
+      "",
+      " return(",
+      "   <>",
+      "     $1",
+      "   </>",
+      " )",
+      "}",
+      "export default $TM_FILENAME_BASE"
+    ],
+    "description": "export default component"
+  },
+  "echo <pre>": {
+    "scope": "javascript,typescript,javascriptreact,typescriptreact",
+    "prefix": "prej",
+    "body": ["<pre>{", "  JSON.stringify({$1}, null, 2)", " }</pre>"],
+    "description": "echo <pre>"
+  },
+  "Console Log Expanded Vars": {
+    "scope": "javascript,typescript,javascriptreact,typescriptreact",
+    "prefix": "clod",
+    "body": [
+      "console.log('$1 :>> ', $1);",
+      "console.dir($1, {depth: null, colors: true, maxArrayLength: null})"
+    ],
+    "description": "Console Log expanded vars"
+  },
+  "Show variable content": {
+    "scope": "php",
+    "prefix": "pre",
+    "body": ["echo '<pre>$$1: ';", "print_r($$1);", "echo '</pre>';"],
+    "description": "Show variable content"
+  },
+  "Show variable content and Die": {
+    "scope": "php",
+    "prefix": "pred",
+    "body": [
+      "echo '<pre>$$1: ';",
+      "print_r($$1);",
+      "echo '</pre>';",
+      "die(__FILE__ . ' at line: ' . __LINE__);"
+    ],
+    "description": "Show variable content and Die"
+  },
+  "Foreach": {
+    "scope": "php",
+    "prefix": "forek",
+    "body": ["foreach($$1 as $$i => $$v){", "", "}"],
+    "description": "Starts a foreach loop"
+  }
+}
